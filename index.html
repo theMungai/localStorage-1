@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage-1</title>
+</head>
+<body>
+    <input type="text" placeholder="Name of the product" class="product-name">
+    <input type="number" placeholder="Price of the product" class="product-price">
+    <button>Add Products</button>
+    <div class="product-container">
+        
+    </div>
+
+    <script>
+        const productName = document.querySelector(".product-name");
+        const productPrice = document.querySelector(".product-price");
+        const addProductBtn = document.querySelector("button");
+
+        addProductBtn.addEventListener("click", () => {
+            addProduct()
+        })
+
+        // Empty Array
+        const productArray = JSON.parse(localStorage.getItem("products")) || [];
+
+        // Product object generator
+        class Product {
+            constructor(product, price){
+                this.product = product;
+                this.price = price
+            }
+        }
+
+        // Function to add product to the localStorage
+        function addProduct(){
+            let addedProduct = new Product(productName.value, productPrice.value);
+            const generatedProduct = `
+                <p>${addedProduct.product} = KShs. ${addedProduct.price}<button>Delete</button></p>
+            `;
+            productArray.push(addedProduct);
+            localStorage.setItem("products", JSON.stringify(productArray));
+
+            document.querySelector(".product-container").innerHTML += generatedProduct
+            
+            // Empty the inputs after adding the product
+            productName.value = "";
+            productPrice.value = ""
+        }
+
+        // function to render products from the localStorage to the DOM
+        function renderProducts(){
+            const productContainer = document.querySelector(".product-container");
+            productContainer.innerHTML = "";
+
+            productArray.forEach((product) => {
+                let storedProduct = `
+                    <p>${product.product} = KShs. ${product.price} <button>Delete</button></p>
+                `;
+
+                productContainer.innerHTML += storedProduct
+            })
+        }
+        renderProducts()
+    </script>
+</body>
+</html>
