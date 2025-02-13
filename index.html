@@ -37,7 +37,7 @@
         function addProduct(){
             let addedProduct = new Product(productName.value, productPrice.value);
             const generatedProduct = `
-                <p>${addedProduct.product} = KShs. ${addedProduct.price}<button>Delete</button></p>
+                <p>${addedProduct.product} = KShs. ${addedProduct.price}<button class = "delete-product">Delete</button></p>
             `;
             productArray.push(addedProduct);
             localStorage.setItem("products", JSON.stringify(productArray));
@@ -49,17 +49,33 @@
             productPrice.value = ""
         }
 
+        // Function to delete an item from the localStorage
+        function deleteProduct(index){
+            productArray.splice(index,1)
+            localStorage.setItem("products", JSON.stringify(productArray));
+            renderProducts()
+        }
+
         // function to render products from the localStorage to the DOM
         function renderProducts(){
             const productContainer = document.querySelector(".product-container");
             productContainer.innerHTML = "";
 
-            productArray.forEach((product) => {
+            productArray.forEach((product,index) => {
                 let storedProduct = `
-                    <p>${product.product} = KShs. ${product.price} <button>Delete</button></p>
+                    <p>${product.product} = KShs. ${product.price} 
+                        <button class = "delete-product" data-index = "${index}">Delete</button>
+                    </p>
                 `;
 
                 productContainer.innerHTML += storedProduct
+            });
+
+            document.querySelectorAll(".delete-product").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const index = button.dataset.index
+                    deleteProduct(index)
+                })
             })
         }
         renderProducts()
