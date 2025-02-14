@@ -17,6 +17,13 @@ class Product {
     }
 }
 
+// Enabling "Enter" keyboard
+productPrice.addEventListener("keydown", (event) => {
+    if(event.key === "Enter"){
+        addProduct()
+    }
+})
+
 // Function to add product to the localStorage
 function addProduct(){
     let addedProduct = new Product(productName.value, productPrice.value);
